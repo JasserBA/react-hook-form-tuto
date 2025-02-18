@@ -53,6 +53,22 @@ export const TutoForm = () => {
                 value: /\S+@\S+\.\S+/,
                 message: "Invalid email",
               },
+              // could validate custom rule
+              // as key, maybe we need specify a name for the validation rule
+              validate: {
+                notAdmin: (fieldValue) => {
+                  return (
+                    fieldValue !== "admin@gmail.com" ||
+                    "Enter a different email address!"
+                  );
+                },
+                notBlackListed: (fieldValue) => {
+                  return (
+                    !fieldValue.endsWith("baddomain.com") ||
+                    "This domaine is spammy or suspicious emails!"
+                  );
+                },
+              },
             })}
           />
           <span className="error">{errors.email?.message}</span>
