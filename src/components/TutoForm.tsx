@@ -1,12 +1,28 @@
 import { useForm } from "react-hook-form"
 import {DevTool} from "@hookform/devtools"
+let renderCount = 0;
+type FormValues ={
+  username:string,
+  email:string,
+  channel:string
+}
 
 export const TutoForm = () => {
-  const form = useForm();
-  const {register, control} = form
+//  we need to add formValues type when invoking the useForm
+  const form = useForm<FormValues>();
+  const {register, control, handleSubmit} = form
+
+  renderCount++;
+
+  function onSumbit(data:FormValues){
+    console.log("form clicked",data);
+    
+  }
   return (
     <div>
-        <form >
+      <h2><mark>Tuto: {Math.floor(renderCount/2)}</mark></h2>
+      {/* automatique kol touched field todhher data f console  */}
+        <form onClick={handleSubmit(onSumbit)}>
             <label htmlFor="username">Username</label>
             {/* <input type='text' id="username" name={name} ref={ref} onChange={onChange} onBlur={onBlur} /> */}
             <input type='text' id="username" {...register("username")} />
