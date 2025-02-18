@@ -1,7 +1,10 @@
 import { useFieldArray, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useEffect } from "react";
+import emailjs from "emailjs-com";
+
 let renderCount = 0;
+
 type FormValues = {
   username: string;
   email: string;
@@ -59,14 +62,40 @@ export const TutoForm = () => {
 
   renderCount++;
 
-  useEffect(() => {
+  function handleSendEmail(data: FormValues) {
+    // Your EmailJS service/template/publicKey
+    const serviceId = "service_5a4s1kc";
+    const templateId = "template_g72szmc";
+    const publicKey = "cmqQqmx3z83_eMQMV";
+
+    // Create a new object that contains dynamic template parameters
+    const templateParams = {
+      username: data.username,
+      email: data.email,
+      channel: data.channel,
+    };
+
+    // Send email via EmailJS
+    emailjs
+      .send(serviceId, templateId, templateParams, publicKey)
+      .then((response) => {
+        console.log("Email sent successfully:", response);
+        reset();
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
+  }
+
+  /*  useEffect(() => {
     if (isSubmitSuccessful) {
       reset();
     }
   }, [isSubmitSuccessful, reset]);
-
+*/
   function onSumbit(data: FormValues) {
     console.log("form clicked", data);
+    handleSendEmail(data);
   }
   return (
     <div>
