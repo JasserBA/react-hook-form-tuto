@@ -5,11 +5,31 @@ type FormValues = {
   username: string;
   email: string;
   channel: string;
+  social: {
+    x: string;
+    reddit: string;
+  };
 };
 
 export const TutoForm = () => {
   //  we need to add formValues type when invoking the useForm
-  const form = useForm<FormValues>();
+  const form = useForm<FormValues>({
+    defaultValues: async () => {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/users/9"
+      );
+      const data = await response.json();
+      return {
+        username: "jasser",
+        email: data.email,
+        channel: "",
+        social: {
+          x: "s",
+          reddit: "s",
+        },
+      };
+    },
+  });
   const { register, control, handleSubmit, formState } = form;
   // the erros object conain individual field errors
   const { errors } = formState;
@@ -42,6 +62,7 @@ export const TutoForm = () => {
           />
           <span className="error">{errors.username?.message}</span>
         </div>
+
         <div className="form-control">
           <label htmlFor="email">Email</label>
           <input
@@ -73,6 +94,7 @@ export const TutoForm = () => {
           />
           <span className="error">{errors.email?.message}</span>
         </div>
+
         <div className="form-control">
           <label htmlFor="channel">Channel</label>
           <input
@@ -86,6 +108,36 @@ export const TutoForm = () => {
             })}
           />
           <span className="error">{errors.channel?.message}</span>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="x">X</label>
+          <input
+            type="text"
+            id="x"
+            {...register("social.x", {
+              required: {
+                value: true,
+                message: "Should be filled",
+              },
+            })}
+          />
+          <span className="error">{errors.social?.x?.message}</span>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="reddit">Reddit</label>
+          <input
+            type="text"
+            id="reddit"
+            {...register("social.reddit", {
+              required: {
+                value: true,
+                message: "Should be filled",
+              },
+            })}
+          />
+          <span className="error">{errors.social?.reddit?.message}</span>
         </div>
         <button>Submit</button>
       </form>
