@@ -1,5 +1,6 @@
 import { useFieldArray, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
+import { useEffect } from "react";
 let renderCount = 0;
 type FormValues = {
   username: string;
@@ -40,9 +41,16 @@ export const TutoForm = () => {
       };
     },
   });
-  const { register, control, handleSubmit, formState } = form;
+  const { register, control, handleSubmit, formState, reset } = form;
   // the erros object conain individual field errors
-  const { errors, touchedFields, dirtyFields, isDirty, isValid } = formState;
+  const {
+    errors,
+    touchedFields,
+    dirtyFields,
+    isDirty,
+    isValid,
+    isSubmitSuccessful,
+  } = formState;
 
   const { fields, append, remove } = useFieldArray({
     name: "phNumbers",
@@ -50,6 +58,12 @@ export const TutoForm = () => {
   });
 
   renderCount++;
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset();
+    }
+  }, [isSubmitSuccessful, reset]);
 
   function onSumbit(data: FormValues) {
     console.log("form clicked", data);
@@ -103,6 +117,13 @@ export const TutoForm = () => {
                     !fieldValue.endsWith("baddomain.com") ||
                     "This domaine is spammy or suspicious emails!"
                   );
+                },
+                emailAvailable: async (fieldValue) => {
+                  const response = await fetch(
+                    `https://jsonplaceholder.typicode.com/users?email=${fieldValue}`
+                  );
+                  const data = await response.json();
+                  return data.length === 0 || "Email already exists";
                 },
               },
             })}
@@ -240,7 +261,9 @@ export const TutoForm = () => {
           />
           <span className="error">{errors.dateOfBirth?.message}</span>
         </div>
-        <button disabled={!isDirty || !isValid}>Submit</button>
+        <button disabled={!isDirty || !isValid} onClick={() => reset()}>
+          Submit
+        </button>
       </form>
 
       {/* DevTools to able clearly see that the library is tracking the field values! */}
