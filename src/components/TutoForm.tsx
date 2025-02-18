@@ -25,10 +25,20 @@ export const TutoForm = () => {
         <form onClick={handleSubmit(onSumbit)}>
             <label htmlFor="username">Username</label>
             {/* <input type='text' id="username" name={name} ref={ref} onChange={onChange} onBlur={onBlur} /> */}
-            <input type='text' id="username" {...register("username")} />
+            <input type='text' id="username" {...register("username",{
+              required:{
+              // value is obligatory to be filled
+              value:true,
+              message:"Should be filled"}})} />
 
             <label htmlFor="email">Email</label>
-            <input type='text' id="email" {...register("email")}/>
+            <input type='text' id="email" {...register("email",{
+              pattern:{
+                // regex pattern for email
+                value: /\S+@\S+\.\S+/,
+                message : "Invalid email"
+              }
+            })}/>
             
             <label htmlFor="channel">Channel</label>
             <input type='text' id="channel" {...register("channel")}/>
