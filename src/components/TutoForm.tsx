@@ -13,6 +13,8 @@ type FormValues = {
   phNumbers: {
     number: string;
   }[];
+  age: number;
+  dateOfBirth: Date;
 };
 
 export const TutoForm = () => {
@@ -33,6 +35,8 @@ export const TutoForm = () => {
         },
         phoneNumber: ["qsd", ""],
         phNumbers: [{ number: "" }],
+        age: 19,
+        dateOfBirth: new Date(),
       };
     },
   });
@@ -203,6 +207,38 @@ export const TutoForm = () => {
               Add phone NUMBER
             </button>
           </div>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="age">Age</label>
+          <input
+            type="number"
+            id="age"
+            {...register("age", {
+              valueAsNumber: true,
+              required: {
+                value: true,
+                message: "Should be filled",
+              },
+            })}
+          />
+          <span className="error">{errors.age?.message}</span>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="dateOfBirth">DateOfBirth</label>
+          <input
+            type="date"
+            id="dateOfBirth"
+            {...register("dateOfBirth", {
+              valueAsDate: true,
+              required: {
+                value: true,
+                message: "Should be filled",
+              },
+            })}
+          />
+          <span className="error">{errors.dateOfBirth?.message}</span>
         </div>
         <button>Submit</button>
       </form>
