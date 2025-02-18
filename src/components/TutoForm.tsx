@@ -9,6 +9,7 @@ type FormValues = {
     x: string;
     reddit: string;
   };
+  phoneNumber: Array<string>;
 };
 
 export const TutoForm = () => {
@@ -27,6 +28,7 @@ export const TutoForm = () => {
           x: "s",
           reddit: "s",
         },
+        phoneNumber: ["qsd", ""],
       };
     },
   });
@@ -139,6 +141,37 @@ export const TutoForm = () => {
           />
           <span className="error">{errors.social?.reddit?.message}</span>
         </div>
+
+        <div className="form-control">
+          <label htmlFor="phoneNumber">phoneNumber</label>
+          <input
+            type="text"
+            id="phoneNumber"
+            {...register("phoneNumber.0", {
+              required: {
+                value: true,
+                message: "Should be filled",
+              },
+            })}
+          />
+          <span className="error">{errors.phoneNumber?.[0]?.message}</span>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="phoneNumber">phoneNumber</label>
+          <input
+            type="text"
+            id="phoneNumber"
+            {...register("phoneNumber.1", {
+              required: {
+                value: true,
+                message: "Should be filled",
+              },
+            })}
+          />
+          <span className="error">{errors.phoneNumber?.[1]?.message}</span>
+        </div>
+
         <button>Submit</button>
       </form>
 
