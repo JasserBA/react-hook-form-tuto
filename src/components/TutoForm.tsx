@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 let renderCount = 0;
 type FormValues = {
@@ -10,6 +10,9 @@ type FormValues = {
     reddit: string;
   };
   phoneNumber: Array<string>;
+  phNumbers: {
+    number: string;
+  }[];
 };
 
 export const TutoForm = () => {
@@ -29,12 +32,18 @@ export const TutoForm = () => {
           reddit: "s",
         },
         phoneNumber: ["qsd", ""],
+        phNumbers: [{ number: "" }],
       };
     },
   });
   const { register, control, handleSubmit, formState } = form;
   // the erros object conain individual field errors
   const { errors } = formState;
+
+  const { fields, append, remove } = useFieldArray({
+    name: "phNumbers",
+    control,
+  });
 
   renderCount++;
 
@@ -172,6 +181,29 @@ export const TutoForm = () => {
           <span className="error">{errors.phoneNumber?.[1]?.message}</span>
         </div>
 
+        <div>
+          <h2>List of fields</h2>
+          <div>
+            {fields.map((f, index) => (
+              <div className="form-control" key={f.id}>
+                <label htmlFor={`phoneNumber-${index}`}>Phone Number</label>
+                <input
+                  type="text"
+                  id={`phoneNumber-${index}`}
+                  {...register(`phNumbers.${index}.number` as const)}
+                />
+                {index > 0 && (
+                  <button type="button" onClick={() => remove(index)}>
+                    Delete
+                  </button>
+                )}
+              </div>
+            ))}
+            <button type="button" onClick={() => append({ number: "" })}>
+              Add phone NUMBER
+            </button>
+          </div>
+        </div>
         <button>Submit</button>
       </form>
 
