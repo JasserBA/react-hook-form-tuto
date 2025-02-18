@@ -42,7 +42,7 @@ export const TutoForm = () => {
   });
   const { register, control, handleSubmit, formState } = form;
   // the erros object conain individual field errors
-  const { errors } = formState;
+  const { errors, touchedFields, dirtyFields, isDirty, isValid } = formState;
 
   const { fields, append, remove } = useFieldArray({
     name: "phNumbers",
@@ -240,7 +240,7 @@ export const TutoForm = () => {
           />
           <span className="error">{errors.dateOfBirth?.message}</span>
         </div>
-        <button>Submit</button>
+        <button disabled={!isDirty || !isValid}>Submit</button>
       </form>
 
       {/* DevTools to able clearly see that the library is tracking the field values! */}
